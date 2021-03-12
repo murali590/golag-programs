@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"math/rand"
+	"os"
 	"strconv"
 )
 
@@ -75,45 +76,66 @@ func main() {
 	var rname string
 	var phno string
 	var addr string
-	//var uv userver
-
-	fmt.Println("enter representative name, phoneno, place")
-	fmt.Scanln(&rname)
-	fmt.Scanln(&phno)
-	fmt.Scanln(&addr)
-
-	addrep := Representative{Name: rname, Mobile: phno, Place: addr}
-
-	flag = dev.AddDeliveryrep(addrep)
-
-	if flag {
-		dev.reps = append(dev.reps, addrep)
-		for i := 0; i < len(dev.reps); i++ {
-			fmt.Printf("%v\n", dev.reps[i])
-		}
-	} else {
-		fmt.Println("mobile no already regristered")
-	}
 
 	var assg assigns
 	var odplace string
 	ord := make([]order, 0)
+	//var uv userver
+	for {
+		var userchoice int
+		fmt.Printf("enter\n 1.add representative \n 2.Assign order to representative \n 3.display orders and its representative\n")
+		fmt.Scanln(&userchoice)
 
-	fmt.Println("enter order place")
-	fmt.Scanln(&odplace)
+		switch userchoice {
+		case 1:
+			{
+				fmt.Println("enter representative name, phoneno, place")
+				fmt.Scanln(&rname)
+				fmt.Scanln(&phno)
+				fmt.Scanln(&addr)
 
-	var ordid string = "oid" + strconv.Itoa(rand.Intn(1000))
-	var ornew order = order{orderid: ordid, devplace: odplace}
+				addrep := Representative{Name: rname, Mobile: phno, Place: addr}
 
-	flag = assg.assigndelv(dev, ornew)
+				flag = dev.AddDeliveryrep(addrep)
 
-	if flag {
-		fmt.Println("order assigned to representative\n")
-		ord = append(ord, ornew)
-	} else {
-		fmt.Println("place of order do not have any representative\n")
+				if flag {
+					dev.reps = append(dev.reps, addrep)
+					for i := 0; i < len(dev.reps); i++ {
+						fmt.Printf("%v\n", dev.reps[i])
+					}
+				} else {
+					fmt.Println("mobile no already regristered")
+				}
+			}
+		case 2:
+			{
+				fmt.Println("enter order place")
+				fmt.Scanln(&odplace)
+
+				var ordid string = "oid" + strconv.Itoa(rand.Intn(1000))
+				var ornew order = order{orderid: ordid, devplace: odplace}
+
+				flag = assg.assigndelv(dev, ornew)
+
+				if flag {
+					fmt.Println("order assigned to representative\n")
+					ord = append(ord, ornew)
+				} else {
+					fmt.Println("place of order do not have any representative\n")
+				}
+			}
+
+		case 3:
+			{
+				assg.viewassg()
+			}
+
+		default:
+			{
+				os.Exit(1)
+			}
+
+		}
+
 	}
-
-	assg.viewassg()
-
 }
