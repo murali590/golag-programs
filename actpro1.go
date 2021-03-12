@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"math/rand"
+	"os"
 	"strconv"
 )
 
@@ -193,7 +194,7 @@ func main() {
 			}
 
 		default:
-			break
+			os.Exit(1)
 
 		}
 	}
